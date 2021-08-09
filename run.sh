@@ -7,6 +7,7 @@ clear
 echo "SimplyArch bootstrapper..."
 echo "Copyright (C) 2021 Fernando Bello M"
 echo 
+rm -r /var/lib/pacman/sync
 pacman -Syy
 pacman -Sy glibc --noconfirm
 pacman -S git --noconfirm
