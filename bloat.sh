@@ -14,18 +14,19 @@ echo "We'll guide you through the process of installing a DE, additional softwar
 echo
 echo ">>> Desktop Environment <<<"
 echo
-while ! [[ "$desktop" =~ ^(1|2|3|4|5|6|7|8)$ ]]; do
-    echo "Please select one option:"
-    echo "1. GNOME Minimal"
-    echo "2. GNOME Full (beware of pkgs count)"
-    echo "3. KDE Plasma"
-    echo "4. Xfce"
-    echo "5. LXQt"
-    echo "6. LXDE"
-    echo "7. Cinnamon"
-    echo "8. None - I don't want bloat"
-    read -p "Desktop (1-8): " desktop
-done
+desktop="3"
+#while ! [[ "$desktop" =~ ^(1|2|3|4|5|6|7|8)$ ]]; do
+#    echo "Please select one option:"
+#    echo "1. GNOME Minimal"
+#    echo "2. GNOME Full (beware of pkgs count)"
+#    echo "3. KDE Plasma"
+#    echo "4. Xfce"
+#    echo "5. LXQt"
+#    echo "6. LXDE"
+#    echo "7. Cinnamon"
+#    echo "8. None - I don't want bloat"
+#    read -p "Desktop (1-8): " desktop
+#done
 case $desktop in
 1)
     DEpkg="gdm gnome-shell gnome-backgrounds gnome-control-center gnome-screenshot gnome-system-monitor gnome-terminal gnome-tweak-tool nautilus gedit gnome-calculator gnome-disk-utility eog evince"
@@ -61,11 +62,12 @@ case $desktop in
     ;;
 esac
 
-# enable DM accordingly
-arch-chroot /mnt /bin/bash -c "systemctl enable ${DM}.service"
 
 # install packages accordingly
 arch-chroot /mnt /bin/bash -c "pacman -Sy $DEpkg firefox  pavucontrol pipewire pipewire-pulse pipewire-pulse pipewire-jack libdbusmenu-glib libsecret simplescreenrecorder "
+# enable DM accordingly
+arch-chroot /mnt /bin/bash -c "systemctl enable ${DM}.service"
+
 
 echo ">>> Printer Support (CUPS) <<<"
 echo
@@ -79,6 +81,7 @@ echo "Install pacmac, google,vlc, mpv"
 arch-chroot /mnt /bin/bash -c "pacman -S --noconfirm --needed tar gzip bzip2 zip unzip unrar p7zip arj lzop xz "
 arch-chroot /mnt runuser -l ${user} -c "yay -S --noconfirm --needed pamac-all-git google-chrome vlc mpv visual-studio-code-bin ice-ssb mailspring auto-cpufreq"
 arch-chroot /mnt /bin/bash -c "systemctl enable auto-cpufreq"
+sleep 2
 
 echo "Install ZRam"
 arch-chroot /mnt /bin/bash -c "pacman -S --noconfirm  --needed systemd-swap"
@@ -89,6 +92,7 @@ echo -e 'zram_streams=$NCPU' >>/mnt/etc/systemd/swap.conf
 echo -e 'zram_alg=lz4                    # lzo lz4 deflate lz4hc 842 - for Linux 4.8.4' >>/mnt/etc/systemd/swap.conf
 echo -e 'zram_prio=200                   # 1 - 32767' >>/mnt/etc/systemd/swap.conf
 arch-chroot /mnt /bin/bash -c "systemctl enable systemd-swap.service"
+sleep 2
 
 echo "Install timeshift"
 arch-chroot /mnt runuser -l ${user} -c "yay -Syu --noconfirm --needed timeshift timeshift-autosnap"

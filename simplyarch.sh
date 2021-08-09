@@ -1,7 +1,13 @@
 #!/bin/bash
 
-KERNEL="Linux-zen"
-
+KERNEL="linux-zen"
+[[ -r detect.sh ]] && source detect.sh
+keyboard="latam"
+locale="es_MX"
+user="Fernando"
+userpw="moon"
+rootpw="moon"
+hostname="ArchLinux"
 # WARNING: THIS SCRIPT USES RELATIVE FILE PATHS SO IT MUST BE RUN FROM THE SAME WORKING DIRECTORY AS THE CLONED REPO
 
 clear
@@ -23,54 +29,59 @@ if [[ $prompt == "y" || $prompt == "Y" || $prompt == "yes" || $prompt == "Yes" ]
 	echo
 	echo "EXAMPLES:"
 	echo "us United States | us-acentos US Intl | latam Latin American Spanish | es Spanish"
-	read -p "Keyboard layout: " keyboard
-	if [[ -z "$keyboard" ]]; then
-		keyboard="latam"
-	fi
+	echo "$keyboard"
+	[[ -z "$keyboard" ]] && read -p "Keyboard layout: " keyboard
+	[[ -z "$keyboard" ]] && keyboard="latam"
+
 	echo
 	echo "EXAMPLES: en_US | es_ES (don't add .UTF-8)"
-	read -p "Locale: " locale
-	if [[ -z "$locale" ]]; then
-		locale="es_MX"
-	fi
+	echo "locale=${locale}"
+	[[ -z "$locale" ]] && read -p "Locale: " locale
+	[[ -z "$locale" ]] && locale="es_MX"
+	sleep 3
 	clear
 	# Ask account
 	echo ">>> Account Setup <<<"
-	echo
-	read -p "Hostname: " hostname
+	echo "Hostname : ${hostname}"
+	[[ -z "$hostname" ]] && read -p "Hostname: " hostname
 	echo
 	echo "Administrator User"
-	echo "User: root"
-	read -sp "Password: " rootpw
-	echo
-	read -sp "Re-type password: " rootpw2
-	echo
-	while [[ $rootpw != "$rootpw2" ]]; do
-		echo
-		echo "Passwords don't match. Try again"
-		echo
+	echo "User: root ${rootpw}"
+	if [[ -z "$rootpw" ]]; then
 		read -sp "Password: " rootpw
 		echo
 		read -sp "Re-type password: " rootpw2
 		echo
-	done
+		while [[ $rootpw != "$rootpw2" ]]; do
+			echo
+			echo "Passwords don't match. Try again"
+			echo
+			read -sp "Password: " rootpw
+			echo
+			read -sp "Re-type password: " rootpw2
+			echo
+		done
+	fi
 	echo
-	echo "Standard User"
-	read -p "User: " user
+	echo "Standard User : ${user}"
+	[[ -z "$user" ]] && read -p "User: " user
 	export user
-	read -sp "Password: " userpw
-	echo
-	read -sp "Re-type password: " userpw2
-	echo
-	while [[ $userpw != "$userpw2" ]]; do
-		echo
-		echo "Passwords don't match. Try again"
-		echo
+	echo "pw: $userpw"
+	if [[ -z "$userpw" ]]; then
 		read -sp "Password: " userpw
 		echo
 		read -sp "Re-type password: " userpw2
 		echo
-	done
+		while [[ $userpw != "$userpw2" ]]; do
+			echo
+			echo "Passwords don't match. Try again"
+			echo
+			read -sp "Password: " userpw
+			echo
+			read -sp "Re-type password: " userpw2
+			echo
+		done
+	fi
 	# Disk setup
 	clear
 	echo ">>> Disks Setup <<<"
@@ -83,7 +94,7 @@ if [[ $prompt == "y" || $prompt == "Y" || $prompt == "yes" || $prompt == "Yes" ]
 	lsblk
 	echo
 	while ! [[ "$partType" =~ ^(1|2)$ ]]; do
-		echo "Please select partition type (1/2):"
+		echo "Please select partition Root type (1/2):"
 		echo "1. EXT4"
 		echo "2. BTRFS"
 		read -p "Partition Type: " partType
@@ -167,9 +178,9 @@ if [[ $prompt == "y" || $prompt == "Y" || $prompt == "yes" || $prompt == "Yes" ]
 	sleep 3
 	# Install base systems
 	if [[ -d /sys/firmware/efi ]]; then
-		pacstrap /mnt base base-devel  $KERNEL $KERNEL-headers  linux-firmware  grub efibootmgr os-prober bash-completion sudo nano vim networkmanager network-manager-applet  dialog ntfs-3g nfs-utils neofetch htop git reflector xdg-user-dirs xdg-utils e2fsprogs man-db gvfs gvfs-smb ${btrfs_pack}
+		pacstrap /mnt base base-devel $KERNEL $KERNEL-headers linux-firmware grub efibootmgr os-prober bash-completion sudo nano vim networkmanager network-manager-applet dialog ntfs-3g nfs-utils neofetch htop git reflector xdg-user-dirs xdg-utils e2fsprogs man-db gvfs gvfs-smb ${btrfs_pack}
 	else
-		pacstrap /mnt base base-devel  $KERNEL $KERNEL-headers  linux-firmware  grub os-prober bash-completion sudo nano vim networkmanager network-manager-applet dialog ntfs-3g nfs-utils neofetch htop git reflector xdg-user-dirs xdg-utils e2fsprogs man-db gvfs gvfs-smb ${btrfs_pack}
+		pacstrap /mnt base base-devel $KERNEL $KERNEL-headers linux-firmware grub os-prober bash-completion sudo nano vim networkmanager network-manager-applet dialog ntfs-3g nfs-utils neofetch htop git reflector xdg-user-dirs xdg-utils e2fsprogs man-db gvfs gvfs-smb ${btrfs_pack}
 	fi
 	# fstab
 	genfstab -U /mnt >>/mnt/etc/fstab
@@ -203,7 +214,7 @@ if [[ $prompt == "y" || $prompt == "Y" || $prompt == "yes" || $prompt == "Yes" ]
 	_git "$theme_grub" "./install.sh"
 
 	if [[ -d /sys/firmware/efi ]]; then
-		arch-chroot /mnt /bin/bash -c "grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=Arch"
+		arch-chroot /mnt /bin/bash -c "grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=${hostname}"
 	else
 		arch-chroot /mnt /bin/bash -c "grub-install ${rootPart::-1}"
 	fi
@@ -233,7 +244,6 @@ if [[ $prompt == "y" || $prompt == "Y" || $prompt == "yes" || $prompt == "Yes" ]
 	#	clear
 	_yay_install
 	# detect hardware
-	[[ -r detect.sh ]] && source detect.sh
 	_detect_hardware
 	_detect_video
 	_detect_touch
@@ -252,8 +262,8 @@ if [[ $prompt == "y" || $prompt == "Y" || $prompt == "yes" || $prompt == "Yes" ]
 	if [[ $reboot == "y" || $reboot == "Y" || $reboot == "yes" || $reboot == "Yes" ]]; then
 		echo "System will reboot in a moment..."
 		sleep 3
-		clear 
-		umount -a
+		clear
+		umount -a /mnt
 		reboot
 	fi
 fi

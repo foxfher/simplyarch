@@ -60,11 +60,12 @@ _git() {
 
 _yay_install() {
     #  _ProgressBar "${_Messages[RequierePackage]} " "yay"
+    echo "Install yay" 
     sed -i 's/%wheel ALL=(ALL) ALL/%wheel ALL=(ALL) NOPASSWD: ALL/' /etc/sudoers
     runuser -l ${user} -c "cd /home/$user && git clone https://aur.archlinux.org/yay.git && (cd yay && makepkg -si --noconfirm) && sudo rm -rf /home/$user/yay"
-    if [[ -f /etc/pamac.conf ]]; then
-        sed -i '/#EnableAUR/ s/^#//' /etc/pamac.conf 
-        sed -i '/#CheckAURUpdates/ s/^#//' /etc/pamac.conf
+    if [[ -f /mnt/etc/pamac.conf ]]; then
+        sed -i '/#EnableAUR/ s/^#//' /mnt/etc/pamac.conf 
+        sed -i '/#CheckAURUpdates/ s/^#//' /mnt/etc/pamac.conf
     fi
 }
 
@@ -79,6 +80,7 @@ _detect_hardware() {
     #bluetooh
     [[ ! -z "$(lsusb | grep -i "Bluetooth")" ]] && bluetooh='bluez bluez-utils'
     diver="$(lsusb | grep -i "Bluetooth" | cut -d" " -f9- | cut -d " " -f1 | awk '{print tolower($0)}')-firmware"
+    echo "wifi:${wifi} -- ${driver}"
     arch-chroot /${MountPoint} /bin/bash -c "pacman -Sy --noconfirm --needed ${bluetooh} ${wifi} ${cpu}"
     arch-chroot /mnt runuser -l ${user} -c "yay -S --noconfirm --needed ${dirver}"
 }
