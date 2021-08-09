@@ -1,14 +1,16 @@
 #!/bin/bash
+# WARNING: THIS SCRIPT USES RELATIVE FILE PATHS SO IT MUST BE RUN FROM THE SAME WORKING DIRECTORY AS THE CLONED REPO
+
+[[ -r detect.sh ]] && source detect.sh
 
 KERNEL="linux-zen"
-[[ -r detect.sh ]] && source detect.sh
 keyboard="latam"
 locale="es_MX"
 user="Fernando"
 userpw="moon"
 rootpw="moon"
 hostname="ArchLinux"
-# WARNING: THIS SCRIPT USES RELATIVE FILE PATHS SO IT MUST BE RUN FROM THE SAME WORKING DIRECTORY AS THE CLONED REPO
+
 
 clear
 echo
