@@ -252,7 +252,7 @@ if [[ $prompt == "y" || $prompt == "Y" || $prompt == "yes" || $prompt == "Yes" ]
 	if [[ $reboot == "y" || $reboot == "Y" || $reboot == "yes" || $reboot == "Yes" ]]; then
 		echo "System will reboot in a moment..."
 		sleep 3
-		clear
+		clear 
 		umount -a
 		reboot
 	fi
