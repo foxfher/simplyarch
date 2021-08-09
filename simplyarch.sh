@@ -11,7 +11,6 @@ userpw="moon"
 rootpw="moon"
 hostname="ArchLinux"
 
-
 clear
 echo
 echo "Welcome to SimplyArch Installer"
