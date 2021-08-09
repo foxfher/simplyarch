@@ -6,7 +6,7 @@
 
 clear
 echo "Bloat by SimplyArch (BETA)"
-echo "Copyright (C) 2021 Victor Bayas"
+echo "Copyright (C) 2021 Fernando Bello M"
 echo
 echo "NOTE: THIS STEP IS COMPLETELY OPTIONAL, feel free to select None and finish the installation process"
 echo
