@@ -62,7 +62,8 @@ _yay_install() {
     #  _ProgressBar "${_Messages[RequierePackage]} " "yay"
     echo "Install yay" 
     sed -i 's/%wheel ALL=(ALL) ALL/%wheel ALL=(ALL) NOPASSWD: ALL/' /etc/sudoers
-    runuser -l ${user} -c "cd /home/$user && git clone https://aur.archlinux.org/yay.git && (cd yay && makepkg -si --noconfirm) && sudo rm -rf /home/$user/yay"
+    echo "cd && git clone https://aur.archlinux.org/yay.git && cd yay && makepkg -si --noconfirm && cd && rm -rf yay" | arch-chroot /mnt /bin/bash -c "su $user"
+    ##runuser -l ${user} -c "cd /home/$user && git clone https://aur.archlinux.org/yay.git && (cd yay && makepkg -si --noconfirm) && sudo rm -rf /home/$user/yay"
     if [[ -f /mnt/etc/pamac.conf ]]; then
         sed -i '/#EnableAUR/ s/^#//' /mnt/etc/pamac.conf 
         sed -i '/#CheckAURUpdates/ s/^#//' /mnt/etc/pamac.conf

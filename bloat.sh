@@ -64,7 +64,7 @@ esac
 
 
 # install packages accordingly
-arch-chroot /mnt /bin/bash -c "pacman -Sy $DEpkg firefox  pavucontrol pipewire pipewire-pulse pipewire-pulse pipewire-jack libdbusmenu-glib libsecret simplescreenrecorder "
+arch-chroot /mnt /bin/bash -c "pacman -Sy --noconfirm --needed $DEpkg firefox  pavucontrol pipewire pipewire-pulse pipewire-pulse pipewire-jack libdbusmenu-glib libsecret simplescreenrecorder"
 # enable DM accordingly
 arch-chroot /mnt /bin/bash -c "systemctl enable ${DM}.service"
 
@@ -74,7 +74,7 @@ echo
 #echo "Do you want to add printing support? (Y/N)"
 #read -p "Printing Support: " printerSupport
 #if [[ $printerSupport == "y" || $printerSupport == "Y" || $printerSupport == "yes" || $printerSupport == "Yes" ]]; then
-    arch-chroot /mnt /bin/bash -c "pacman -S cups cups-filterscups-pdf cups-pk-helper bluez-cups ghostscript a2ps gsfonts gutenprint foomatic-db foomatic-db-ppds foomatic-db-gutenprint-ppds foomatic-db-nonfree foomatic-db-nonfree-ppds foomatic-db-engine system-config-printer python-pysmbc splix hplip python-pyqt5 python-reportlab --noconfirm --needed"
+    arch-chroot /mnt /bin/bash -c "pacman -S --noconfirm --needed cups cups-filterscups-pdf cups-pk-helper bluez-cups ghostscript a2ps gsfonts gutenprint foomatic-db foomatic-db-ppds foomatic-db-gutenprint-ppds foomatic-db-nonfree foomatic-db-nonfree-ppds foomatic-db-engine system-config-printer python-pysmbc splix hplip python-pyqt5 python-reportlab "
     arch-chroot /mnt systemctl enable cups.service
 #fi
 echo "Install pacmac, google,vlc, mpv"

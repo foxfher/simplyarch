@@ -4,12 +4,12 @@
 [[ -r detect.sh ]] && source detect.sh
 
 KERNEL="linux-zen"
-keyboard="latam"
-locale="es_MX"
-user="Fernando"
-userpw="moon"
-rootpw="moon"
-hostname="ArchLinux"
+#keyboard="latam"
+#locale="es_MX"
+#user="Fernando"
+#userpw="moon"
+#rootpw="moon"
+#hostname="ArchLinux"
 
 clear
 echo
