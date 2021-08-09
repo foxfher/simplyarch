@@ -37,7 +37,7 @@ case $desktop in
     DM="gdm"
     ;;
 3)
-    DEpkg="xorg xorg-server-xwayland plasma plasma-wayland-session dolphin konsole kate kcalc ark gwenview spectacle okular packagekit-qt5 partitionmanager"
+    DEpkg="xorg xorg-server-xwayland plasma plasma-meta plasma-wayland-session dolphin konsole kate kcalc ark gwenview spectacle okular packagekit-qt5 partitionmanager kde-gtk-config"
     DM="sddm"
     ;;
 4)
