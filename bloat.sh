@@ -69,12 +69,12 @@ arch-chroot /mnt /bin/bash -c "pacman -Sy $DEpkg firefox  pavucontrol pipewire p
 
 echo ">>> Printer Support (CUPS) <<<"
 echo
-echo "Do you want to add printing support? (Y/N)"
-read -p "Printing Support: " printerSupport
-if [[ $printerSupport == "y" || $printerSupport == "Y" || $printerSupport == "yes" || $printerSupport == "Yes" ]]; then
+#echo "Do you want to add printing support? (Y/N)"
+#read -p "Printing Support: " printerSupport
+#if [[ $printerSupport == "y" || $printerSupport == "Y" || $printerSupport == "yes" || $printerSupport == "Yes" ]]; then
     arch-chroot /mnt /bin/bash -c "pacman -S cups cups-filterscups-pdf cups-pk-helper bluez-cups ghostscript a2ps gsfonts gutenprint foomatic-db foomatic-db-ppds foomatic-db-gutenprint-ppds foomatic-db-nonfree foomatic-db-nonfree-ppds foomatic-db-engine system-config-printer python-pysmbc splix hplip python-pyqt5 python-reportlab --noconfirm --needed"
     arch-chroot /mnt systemctl enable cups.service
-fi
+#fi
 echo "Install pacmac, google,vlc, mpv"
 arch-chroot /mnt /bin/bash -c "pacman -S --noconfirm --needed tar gzip bzip2 zip unzip unrar p7zip arj lzop xz "
 arch-chroot /mnt runuser -l ${user} -c "yay -S --noconfirm --needed pamac-all-git google-chrome vlc mpv visual-studio-code-bin ice-ssb mailspring auto-cpufreq"
@@ -89,6 +89,7 @@ echo -e 'zram_streams=$NCPU' >>/mnt/etc/systemd/swap.conf
 echo -e 'zram_alg=lz4                    # lzo lz4 deflate lz4hc 842 - for Linux 4.8.4' >>/mnt/etc/systemd/swap.conf
 echo -e 'zram_prio=200                   # 1 - 32767' >>/mnt/etc/systemd/swap.conf
 arch-chroot /mnt /bin/bash -c "systemctl enable systemd-swap.service"
+
 echo "Install timeshift"
 arch-chroot /mnt runuser -l ${user} -c "yay -Syu --noconfirm --needed timeshift timeshift-autosnap"
 exit 0
