@@ -63,7 +63,7 @@ _yay_install() {
     sed -i 's/%wheel ALL=(ALL) ALL/%wheel ALL=(ALL) NOPASSWD: ALL/' /etc/sudoers
     runuser -l ${user} -c "cd /home/$user && git clone https://aur.archlinux.org/yay.git && (cd yay && makepkg -si --noconfirm) && sudo rm -rf /home/$user/yay"
     if [[ -f /etc/pamac.conf ]]; then
-        sed -i '/#EnableAUR/ s/^#//' /etc/pamac.conf
+        sed -i '/#EnableAUR/ s/^#//' /etc/pamac.conf 
         sed -i '/#CheckAURUpdates/ s/^#//' /etc/pamac.conf
     fi
 }

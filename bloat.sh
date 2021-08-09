@@ -55,7 +55,7 @@ case $desktop in
     DEpkg="lxdm cinnamon cinnamon-translations gnome-terminal"
     DM="lxdm"
     ;;
-8)
+8) 
     echo "No desktop environment will be installed."
     exit 0
     ;;
