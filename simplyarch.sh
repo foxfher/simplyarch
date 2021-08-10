@@ -222,15 +222,15 @@ if [[ $prompt == "y" || $prompt == "Y" || $prompt == "yes" || $prompt == "Yes" ]
 	arch-chroot /mnt /bin/bash -c "grub-mkconfig -o /boot/grub/grub.cfg"
 	#services
 	# networkmanager
-	arch-chroot /mnt /bin/bash -c "systemctl enable NetworkManager.service"
+	arch-chroot /mnt /bin/bash -c "systemctl enable NetworkManager"
 	arch-chroot /mnt /bin/bash -c "systemctl enable reflector.timer"
 	# root pw
 	arch-chroot /mnt /bin/bash -c "(echo $rootpw ; echo $rootpw) | passwd root"
 	# create user
 	arch-chroot /mnt /bin/bash -c "useradd -m -G wheel $user"
 	arch-chroot /mnt /bin/bash -c "(echo $userpw ; echo $userpw) | passwd $user"
-	arch-chroot /mnt sed -i 's/# %wheel ALL=(ALL) ALL/%wheel ALL=(ALL) ALL/' /etc/sudoers
-    arch-chroot /mnt sed -i 's/%wheel ALL=(ALL) ALL/%wheel ALL=(ALL) NOPASSWD: ALL/' /etc/sudoers
+	arch-chroot /mnt sed -i 's/# %wheel ALL=(ALL) ALL/%wheel ALL=(ALL) ALL/' /mnt/etc/sudoers
+	arch-chroot /mnt sed -i 's/%wheel ALL=(ALL) ALL/%wheel ALL=(ALL) NOPASSWD: ALL/' /mnt/etc/sudoers
 
 	arch-chroot /mnt /bin/bash -c "xdg-user-dirs-update"
 	# update mirrors
@@ -240,12 +240,17 @@ if [[ $prompt == "y" || $prompt == "Y" || $prompt == "yes" || $prompt == "Yes" ]
 	arch-chroot /mnt /bin/bash -c "/home/$user/simple_reflector.sh"
 	clear
 	# paru
-	#	echo ">>> AUR Helper <<<"
-	#	echo
-	#	echo "Installing the Paru AUR Helper..."
-	#	echo "cd && git clone https://aur.archlinux.org/paru-bin.git && cd paru-bin && makepkg -si --noconfirm && cd && rm -rf paru-bin" | arch-chroot /mnt /bin/bash -c "su $user"
-	#	clear
+	echo ">>> AUR Helper <<<"
+	echo
+	echo "Installing the Paru AUR Helper..."
+	echo "cd && git clone https://aur.archlinux.org/paru-bin.git && cd paru-bin && makepkg -si --noconfirm && cd && rm -rf paru-bin" | arch-chroot /mnt /bin/bash -c "su $user"
+	clear
+	echo ">>> AUR Helper <<<"
+	echo
+	echo "Installing the yay AUR Helper..."
+	
 	_yay_install
+
 	# detect hardware
 	_detect_hardware
 	_detect_video
@@ -263,7 +268,7 @@ if [[ $prompt == "y" || $prompt == "Y" || $prompt == "yes" || $prompt == "Yes" ]
 	echo
 	read -p "Do you want to reboot? (Y/N): " reboot
 	if [[ $reboot == "y" || $reboot == "Y" || $reboot == "yes" || $reboot == "Yes" ]]; then
-	   arch-chroot /${MountPoint} sed -i 's/%wheel ALL=(ALL) NOPASSWD: ALL/%wheel ALL=(ALL) ALL/' /etc/sudoers
+		arch-chroot /mnt sed -i 's/%wheel ALL=(ALL) NOPASSWD: ALL/%wheel ALL=(ALL) ALL/' /mnt/etc/sudoers
 		echo "System will reboot in a moment..."
 		sleep 3
 		clear
