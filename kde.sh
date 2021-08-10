@@ -16,7 +16,7 @@ echo ">>> Desktop KDE Plasma Environment <<<"
 echo
 desktop="3"
 
-    DEpkg="xorg xorg-server-xwayland plasma plasma-meta plasma-wayland-session dolphin konsole kate kcalc ark gwenview spectacle okular packagekit-qt5 partitionmanager kde-gtk-config"
+    DEpkg="xorg xorg-server-xwayland plasma-desktop plasma-meta plasma-wayland-session dolphin konsole kate kcalc ark gwenview spectacle okular packagekit-qt5 partitionmanager kde-gtk-config"
     DM="sddm"
 # install packages accordingly
 pacman -Sy --noconfirm --needed $DEpkg firefox  pavucontrol pipewire pipewire-pulse pipewire-pulse pipewire-jack libdbusmenu-glib libsecret simplescreenrecorder

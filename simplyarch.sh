@@ -252,8 +252,11 @@ if [[ $prompt == "y" || $prompt == "Y" || $prompt == "yes" || $prompt == "Yes" ]
 	read -p "yay " swap
 	# detect hardware
 	_detect_hardware
+	read -p "wifi " swap
 	_detect_video
+	read -p "video " swap
 	_detect_touch
+	read -p "touch " swap
 	# end
 	clear
 	# bloat
@@ -265,9 +268,10 @@ if [[ $prompt == "y" || $prompt == "Y" || $prompt == "yes" || $prompt == "Yes" ]
 	echo
 	echo ">>> Installation finished sucessfully <<<"
 	echo
+	arch-chroot /mnt sed -i 's/%wheel ALL=(ALL) NOPASSWD: ALL/%wheel ALL=(ALL) ALL/' /mnt/etc/sudoers
 	read -p "Do you want to reboot? (Y/N): " reboot
 	if [[ $reboot == "y" || $reboot == "Y" || $reboot == "yes" || $reboot == "Yes" ]]; then
-		arch-chroot /mnt sed -i 's/%wheel ALL=(ALL) NOPASSWD: ALL/%wheel ALL=(ALL) ALL/' /mnt/etc/sudoers
+		
 		echo "System will reboot in a moment..."
 		sleep 3
 		clear
