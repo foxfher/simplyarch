@@ -61,7 +61,7 @@ _git() {
 _yay_install() {
     #  _ProgressBar "${_Messages[RequierePackage]} " "yay"
     echo "Install yay" 
-    sed -i 's/%wheel ALL=(ALL) ALL/%wheel ALL=(ALL) NOPASSWD: ALL/' /etc/sudoers
+    sed -i 's/%wheel ALL=(ALL) ALL/%wheel ALL=(ALL) NOPASSWD: ALL/' /mnt/etc/sudoers
     echo "cd && git clone https://aur.archlinux.org/yay.git && cd yay && makepkg -si --noconfirm && cd && rm -rf yay" | arch-chroot /mnt /bin/bash -c "su $user"
     ##runuser -l ${user} -c "cd /home/$user && git clone https://aur.archlinux.org/yay.git && (cd yay && makepkg -si --noconfirm) && sudo rm -rf /home/$user/yay"
     if [[ -f /mnt/etc/pamac.conf ]]; then

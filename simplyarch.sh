@@ -206,6 +206,21 @@ if [[ $prompt == "y" || $prompt == "Y" || $prompt == "yes" || $prompt == "Yes" ]
 	echo "::1		localhost" >>/mnt/etc/hosts
 	echo "127.0.1.1	$hostname.localdomain	$hostname" >>/mnt/etc/hosts
 
+	# root pw
+	arch-chroot /mnt /bin/bash -c "(echo $rootpw ; echo $rootpw) | passwd root"
+	# create user
+	arch-chroot /mnt /bin/bash -c "useradd -m -G wheel $user"
+	arch-chroot /mnt /bin/bash -c "(echo $userpw ; echo $userpw) | passwd $user"
+	arch-chroot /mnt sed -i 's/# %wheel ALL=(ALL) ALL/%wheel ALL=(ALL) ALL/' /mnt/etc/sudoers
+	arch-chroot /mnt sed -i 's/%wheel ALL=(ALL) ALL/%wheel ALL=(ALL) NOPASSWD: ALL/' /mnt/etc/sudoers
+	arch-chroot /mnt /bin/bash -c "xdg-user-dirs-update"
+	# update mirrors
+	cp ./simple_reflector.sh /mnt/home/$user/simple_reflector.sh
+	arch-chroot /mnt /bin/bash -c "chmod +x /home/$user/simple_reflector.sh"
+	clear
+	arch-chroot /mnt /bin/bash -c "/home/$user/simple_reflector.sh"
+	clear
+
 	# grub
 	#btrfs
 	[[ ! -z $btrfs_pack ]] &&
@@ -213,7 +228,7 @@ if [[ $prompt == "y" || $prompt == "Y" || $prompt == "yes" || $prompt == "Yes" ]
 	# Carga tema
 	theme_grub="grub2Hat-ArchSES"
 	_git "$theme_grub" "./install.sh"
-
+	read -p "Genera grub: " swap
 	if [[ -d /sys/firmware/efi ]]; then
 		arch-chroot /mnt /bin/bash -c "grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=${hostname}"
 	else
@@ -224,33 +239,17 @@ if [[ $prompt == "y" || $prompt == "Y" || $prompt == "yes" || $prompt == "Yes" ]
 	# networkmanager
 	arch-chroot /mnt /bin/bash -c "systemctl enable NetworkManager"
 	arch-chroot /mnt /bin/bash -c "systemctl enable reflector.timer"
-	# root pw
-	arch-chroot /mnt /bin/bash -c "(echo $rootpw ; echo $rootpw) | passwd root"
-	# create user
-	arch-chroot /mnt /bin/bash -c "useradd -m -G wheel $user"
-	arch-chroot /mnt /bin/bash -c "(echo $userpw ; echo $userpw) | passwd $user"
-	arch-chroot /mnt sed -i 's/# %wheel ALL=(ALL) ALL/%wheel ALL=(ALL) ALL/' /mnt/etc/sudoers
-	arch-chroot /mnt sed -i 's/%wheel ALL=(ALL) ALL/%wheel ALL=(ALL) NOPASSWD: ALL/' /mnt/etc/sudoers
-
-	arch-chroot /mnt /bin/bash -c "xdg-user-dirs-update"
-	# update mirrors
-	cp ./simple_reflector.sh /mnt/home/$user/simple_reflector.sh
-	arch-chroot /mnt /bin/bash -c "chmod +x /home/$user/simple_reflector.sh"
-	clear
-	arch-chroot /mnt /bin/bash -c "/home/$user/simple_reflector.sh"
-	clear
 	# paru
-	echo ">>> AUR Helper <<<"
-	echo
-	echo "Installing the Paru AUR Helper..."
-	echo "cd && git clone https://aur.archlinux.org/paru-bin.git && cd paru-bin && makepkg -si --noconfirm && cd && rm -rf paru-bin" | arch-chroot /mnt /bin/bash -c "su $user"
-	clear
+##	echo ">>> AUR Helper <<<"
+#	echo
+#	echo "Installing the Paru AUR Helper..."
+#	echo "cd && git clone https://aur.archlinux.org/paru-bin.git && cd paru-bin && makepkg -si --noconfirm && cd && rm -rf paru-bin" | arch-chroot /mnt /bin/bash -c "su $user"
+#	clear
 	echo ">>> AUR Helper <<<"
 	echo
 	echo "Installing the yay AUR Helper..."
-	
 	_yay_install
-
+	read -p "yay " swap
 	# detect hardware
 	_detect_hardware
 	_detect_video
